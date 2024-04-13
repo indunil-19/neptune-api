@@ -4,9 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
-  },
+    "start": "node app.js"  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -16,7 +14,7 @@
     "json-schema": "^0.4.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.12",
-    "minimist": "^1.2.6",
+    "minimist": "^1.2.8",
     "mongoose": "^7.6.11",
     "nodemailer": "^6.9.13",
     "nodemailer-sendgrid-transport": "^0.2.0"
