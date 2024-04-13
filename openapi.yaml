@@ -1,0 +1,357 @@
+openapi: 3.0.3
+info:
+  title: Social Media API
+  description: API for a social media platform
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: posts
+    description: Operations related to posts
+paths:
+  /allpost:
+    get:
+      summary: Get all posts
+      description: Retrieve all posts with user and comments information
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostResponse"
+    post:
+      summary: Create a new post
+      description: Create a new post with title, body, and image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPost"
+        responses:
+          "200":
+            description: Post created successfully
+          "422":
+            description: Invalid request body
+  /getsubpost:
+    get:
+      summary: Get posts from followed users
+      description: Retrieve posts from users that the current user follows
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostResponse"
+  /createpost:
+    post:
+      summary: Create a new post
+      description: Create a new post with title, body, and image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPost"
+        responses:
+          "200":
+            description: Post created successfully
+          "422":
+            description: Invalid request body
+  /mypost:
+    get:
+      summary: Get user's posts
+      description: Retrieve posts created by the current user
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostResponse"
+  /like:
+    put:
+      summary: Like a post
+      description: Add a like to a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LikeRequest"
+        responses:
+          "200":
+            description: Like added successfully
+          "422":
+            description: Error adding like
+  /unlike:
+    put:
+      summary: Unlike a post
+      description: Remove a like from a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LikeRequest"
+        responses:
+          "200":
+            description: Like removed successfully
+          "422":
+            description: Error removing like
+  /comment:
+    put:
+      summary: Add a comment to a post
+      description: Add a comment to a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentRequest"
+        responses:
+          "200":
+            description: Comment added successfully
+          "422":
+            description: Error adding comment
+  /deletepost/{postId}:
+    delete:
+      summary: Delete a post
+      description: Delete a post by ID
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Post deleted successfully
+        "422":
+          description: Error deleting post
+  /user/{id}:
+    get:
+      summary: Get user details and posts
+      description: Retrieve user details and posts by user ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserPostsResponse"
+        "404":
+          description: User not found
+  /follow:
+    put:
+      summary: Follow a user
+      description: Follow a user by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FollowRequest"
+        responses:
+          "200":
+            description: User followed successfully
+          "422":
+            description: Error following user
+  /unfollow:
+    put:
+      summary: Unfollow a user
+      description: Unfollow a user by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnfollowRequest"
+        responses:
+          "200":
+            description: User unfollowed successfully
+          "422":
+            description: Error unfollowing user
+  /updatepic:
+    put:
+      summary: Update user profile picture
+      description: Update the profile picture of the current user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePicRequest"
+        responses:
+          "200":
+            description: Profile picture updated successfully
+          "422":
+            description: Error updating profile picture
+  /search-users:
+    post:
+      summary: Search users by email
+      description: Search for users by email address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchUsersRequest"
+        responses:
+          "200":
+            description: Users found successfully
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UsersResponse"
+    /reset-password:
+    post:
+      summary: Reset password
+      description: Request a password reset link via email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        responses:
+          '200':
+            description: Password reset link sent to email
+          '422':
+            description: Error during password reset request
+  /new-password:
+    post:
+      summary: Update password
+      description: Update the user's password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPasswordRequest'
+        responses:
+          '200':
+            description: Password updated successfully
+          '422':
+            description: Error during password update
+
+components:
+  schemas:
+    PostResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+    Post:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        photo:
+          type: string
+        postedBy:
+          $ref: "#/components/schemas/User"
+        likes:
+          type: array
+          items:
+            type: string
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+    Comment:
+      type: object
+      properties:
+        text:
+          type: string
+        postedBy:
+          $ref: "#/components/schemas/User"
+    NewPost:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        pic:
+          type: string
+    LikeRequest:
+      type: object
+      properties:
+        postId:
+          type: string
+    CommentRequest:
+      type: object
+      properties:
+        postId:
+          type: string
+        text:
+          type: string
+    UserPostsResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+    FollowRequest:
+      type: object
+      properties:
+        followId:
+          type: string
+    UnfollowRequest:
+      type: object
+      properties:
+        unfollowId:
+          type: string
+    UpdatePicRequest:
+      type: object
+      properties:
+        pic:
+          type: string
+    SearchUsersRequest:
+      type: object
+      properties:
+        query:
+          type: string
+    UsersResponse:
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    ResetPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+    NewPasswordRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        password:
+          type: string
