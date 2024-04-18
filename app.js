@@ -30,6 +30,10 @@ if (process.env.NODE_ENV == "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
+// health check
+app.get("/healthz", (_, res) => {
+  return res.sendStatus(200);
+});
 
 app.listen(PORT, () => {
   console.log("server is running on", PORT);
