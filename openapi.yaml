@@ -24,8 +24,4 @@ paths:
       operationId: Healthcheck
       responses:
         "200":
-          description: Healthy response
-  
-
-
-  
+          description: Healthy response        
