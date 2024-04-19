@@ -4,30 +4,30 @@ const mongoose = require("mongoose");
 const PORT = parseInt(process.env.PORT) || 8080;
 const { MONGOURI } = require("./config/keys");
 
-mongoose.connect(MONGOURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-mongoose.connection.on("connected", () => {
-  console.log("conneted to mongo yeahh");
-});
-mongoose.connection.on("error", (err) => {
-  console.log("err connecting", err);
-});
+// mongoose.connect(MONGOURI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+// mongoose.connection.on("connected", () => {
+//   console.log("conneted to mongo yeahh");
+// });
+// mongoose.connection.on("error", (err) => {
+//   console.log("err connecting", err);
+// });
 
-require("./models/user");
-require("./models/post");
+// require("./models/user");
+// require("./models/post");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/healthz", (_, res) => {
+app.get("/reading-list/healthz", (_, res) => {
   return res.json({ status: "ok" });
 });
 
-app.use(require("./routes/auth"));
-app.use(require("./routes/post"));
-app.use(require("./routes/user"));
+// app.use(require("./routes/auth"));
+// app.use(require("./routes/post"));
+// app.use(require("./routes/user"));
 
 // if (process.env.NODE_ENV == "production") {
 //   app.use(express.static("client/build"));
