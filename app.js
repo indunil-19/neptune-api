@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const PORT = process.env.PORT || 8080;
+const PORT = parseInt(process.env.PORT) || 8080;
 const { MONGOURI } = require("./config/keys");
 
 mongoose.connect(MONGOURI, {
@@ -18,11 +18,13 @@ mongoose.connection.on("error", (err) => {
 require("./models/user");
 require("./models/post");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/healthz", (_, res) => {
   return res.json({ status: "ok" });
 });
 
-app.use(express.json());
 app.use(require("./routes/auth"));
 app.use(require("./routes/post"));
 app.use(require("./routes/user"));
@@ -37,5 +39,5 @@ app.use(require("./routes/user"));
 // health check
 
 app.listen(PORT, () => {
-  console.log("server is running on", PORT);
+  console.log(`listening on http://localhost:${PORT}`);
 });
